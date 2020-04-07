@@ -15,11 +15,12 @@
         <a :class="{'layui-this': sort === 'answer'}" @click.prevent="search(4)">按热议</a>
       </span>
     </div>
-    <list-item></list-item>
+    <list-item :lists="lists" @nextPage="nextPage()"></list-item>
   </div>
 </template>
 
 <script>
+import { getList } from '@/api/content'
 import ListItem from './ListItem'
 export default {
   name: 'list',
@@ -31,15 +32,57 @@ export default {
       page: 0,
       limit: 20,
       catalog: '',
-      lists: []
+      lists: [{
+        uid: {
+          name: 'zzx',
+          isVip: 1
+        },
+        title: '测试帖子',
+        content: '',
+        created: '2020-04-07 22:04:00',
+        catalog: 'ask',
+        fave: 40,
+        isEnd: 0,
+        reads: 10,
+        answer: 0,
+        status: 0,
+        isTop: 0,
+        tags: [{
+          name: '精华',
+          class: 'layui-bg-red'
+        }, {
+          name: '热门',
+          class: 'layui-bg-blue'
+        }]
+      }]
     }
   },
   components: {
     ListItem
   },
   computed: {},
-  mounted: {},
+  mounted () {
+    this._getList()
+  },
   methods: {
+    _getList () {
+      let options = {
+        catalog: this.catalog,
+        isTop: 0,
+        page: this.page,
+        limit: this.limit,
+        sort: this.sort,
+        tag: this.tag,
+        status: this.status
+      }
+      getList(options).then((res) => {
+        console.log(res)
+      })
+    },
+    nextPage () {
+      this.page++
+      this._getList()
+    },
     search (val) {
       switch (val) {
         // 未结帖
