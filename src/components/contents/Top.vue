@@ -22,29 +22,7 @@ export default {
     return {
       page: 0,
       limit: 20,
-      lists: [{
-        uid: {
-          name: 'zzx',
-          isVip: 1
-        },
-        title: '测试帖子',
-        content: '',
-        created: '2020-04-07 22:04:00',
-        catalog: 'ask',
-        fave: 40,
-        isEnd: 0,
-        reads: 10,
-        answer: 0,
-        status: 0,
-        isTop: 1,
-        tags: [{
-          name: '精华',
-          class: 'layui-bg-red'
-        }, {
-          name: '热门',
-          class: 'layui-bg-blue'
-        }]
-      }]
+      lists: []
     }
   },
   components: {

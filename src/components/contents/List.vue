@@ -15,7 +15,7 @@
         <a :class="{'layui-this': sort === 'answer'}" @click.prevent="search(4)">按热议</a>
       </span>
     </div>
-    <list-item :lists="lists" @nextPage="nextPage()"></list-item>
+    <list-item :lists="lists" :isEnd="isEnd" @nextPage="nextPage()"></list-item>
   </div>
 </template>
 
@@ -26,46 +26,54 @@ export default {
   name: 'list',
   data () {
     return {
+      isEnd: false,
+      isRepeat: false,
       status: '',
       tag: '',
       sort: 'created',
       page: 0,
       limit: 20,
       catalog: '',
-      lists: [{
-        uid: {
-          name: 'zzx',
-          isVip: 1
-        },
-        title: '测试帖子',
-        content: '',
-        created: '2020-04-07 22:04:00',
-        catalog: 'ask',
-        fave: 40,
-        isEnd: 0,
-        reads: 10,
-        answer: 0,
-        status: 0,
-        isTop: 0,
-        tags: [{
-          name: '精华',
-          class: 'layui-bg-red'
-        }, {
-          name: '热门',
-          class: 'layui-bg-blue'
-        }]
-      }]
+      lists: [],
+      current: ''
     }
   },
   components: {
     ListItem
   },
-  computed: {},
+  watch: {
+    current (newval, oldval) {
+      this.page = 0
+      this.lists = []
+      this.isEnd = false
+      this._getList()
+    },
+    '$route' (newval, oldval) {
+      let catalog = this.$route.params['catalog']
+      if (typeof catalog !== 'undefined' && catalog !== '') {
+        this.catalog = catalog
+      }
+      this.init()
+    }
+  },
   mounted () {
+    let catalog = this.$route.params['catalog']
+    if (typeof catalog !== 'undefined' && catalog !== '') {
+      this.catalog = catalog
+    }
     this._getList()
   },
   methods: {
+    init () {
+      this.page = 0
+      this.lists = []
+      this.isEnd = false
+      this._getList()
+    },
     _getList () {
+      if (this.isRepeat) return
+      if (this.isEnd) return
+      this.isRepeat = true
       let options = {
         catalog: this.catalog,
         isTop: 0,
@@ -76,7 +84,23 @@ export default {
         status: this.status
       }
       getList(options).then((res) => {
+        this.isRepeat = false
         console.log(res)
+        if (res.code === 200) {
+          if (res.data.length < this.limit) {
+            this.isEnd = true
+          }
+          if (this.lists.length === 0) {
+            this.lists = res.data
+          } else {
+            this.lists = this.lists.concat(res.data)
+          }
+        }
+      }).catch((err) => {
+        this.isRepeat = false
+        if (err) {
+          this.$alert(err.message)
+        }
       })
     },
     nextPage () {
@@ -84,6 +108,11 @@ export default {
       this._getList()
     },
     search (val) {
+      if (typeof val === 'undefined' && this.current === '') {
+        return
+      }
+      // console.log(val)
+      this.current = val
       switch (val) {
         // 未结帖
         case 0:
@@ -112,6 +141,7 @@ export default {
         default:
           this.status = ''
           this.tag = ''
+          this.current = ''
       }
     }
   }

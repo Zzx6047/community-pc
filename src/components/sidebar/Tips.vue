@@ -4,31 +4,32 @@
     <h3 class="fly-panel-title">温馨通道</h3>
     <div class="fly-panel-main layui-row">
       <ul class="layui-clear imooc-quick">
-        <li class="layui-col-xs6">
-          <a href="" target="_blank">layui 的 GitHub 及 Gitee (码云) 仓库，欢迎Star</a>
-        </li>
-        <li class="layui-col-xs6">
-          <a href="" target="_blank">layui 的 GitHub 及 Gitee (码云) 仓库，欢迎Star</a>
-        </li>
-        <li class="layui-col-xs6">
-          <a href="" target="_blank">layui 的 GitHub 及 Gitee (码云) 仓库，欢迎Star</a>
-        </li>
-        <li class="layui-col-xs6">
-          <a href="" target="_blank">123</a>
+        <li class="layui-col-xs6" v-for="(item, index) in lists" :key="'tips' + index">
+          <a :href="item.link" target="_blank">{{item.title}}</a>
         </li>
       </ul>
     </div>
   </div>
 </template>
 <script>
+import { getTips } from '@/api/content'
 export default {
   name: 'tips',
   data () {
-    return {}
+    return {
+      lists: []
+    }
   },
   components: {},
   computed: {},
-  mounted: {},
+  mounted () {
+    getTips().then((res) => {
+      if (res.code === 200) {
+        console.log(res.data)
+        this.lists = res.data
+      }
+    })
+  },
   methods: {}
 }
 </script>
