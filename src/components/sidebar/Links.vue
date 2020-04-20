@@ -3,20 +3,8 @@
   <div class="fly-panel fly-link">
     <h3 class="fly-panel-title">友情链接</h3>
     <dl class="fly-panel-main">
-      <dd>
-        <a href="/" target="_blank">layui</a>
-      </dd>
-      <dd></dd>
-      <dd>
-        <a href="http://layim.layui.com/" target="_blank">WebIM</a>
-      </dd>
-      <dd></dd>
-      <dd>
-        <a href="http://layer.layui.com/" target="_blank">layer</a>
-      </dd>
-      <dd></dd>
-      <dd>
-        <a href="/laydate/" target="_blank">layDate</a>
+      <dd v-for="(item, index) in lists" :key="'links' + index">
+        <a :href="item.link" target="_blank">{{item.title}}</a>
       </dd>
       <dd></dd>
       <dd>
@@ -31,14 +19,23 @@
 </template>
 
 <script>
+import { getLinks } from '@/api/content'
 export default {
   name: 'links',
   data () {
-    return {}
+    return {
+      lists: []
+    }
   },
   components: {},
   computed: {},
-  mounted: {},
+  mounted () {
+    getLinks().then((res) => {
+      if (res.code === 200) {
+        this.lists = res.data
+      }
+    })
+  },
   methods: {}
 }
 </script>
