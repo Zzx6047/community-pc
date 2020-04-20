@@ -53,14 +53,14 @@
         </template>
         <!-- 登入后的状态 -->
         <template v-else>
-          <li class="layui-nav-item">
+          <li class="layui-nav-item"  @mouseover="show()" @mouseleave="hide()">
             <a class="fly-nav-avatar" href="javascript:;">
               <cite class="layui-hide-xs">{{userInfo.name}}</cite>
               <!-- <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i> -->
               <i class="layui-badge fly-badge-vip layui-hide-xs" v-show="userInfo.isVip != '0'">{{userInfo.isVip}}</i>
               <img :src="userInfo.pic">
             </a>
-            <dl class="layui-nav-child">
+            <dl class="layui-nav-child layui-anim layui-anim-upbit" :class="{'layui-show': isHover}">
               <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
               <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
               <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
@@ -77,6 +77,26 @@
 <script>
 export default {
   name: 'Header',
+  data () {
+    return {
+      isHover: false,
+      hoverCtrl: {}
+    }
+  },
+  methods: {
+    show () {
+      clearTimeout(this.hoverCtrl)
+      this.hoverCtrl = setTimeout(() => {
+        this.isHover = true
+      }, 200)
+    },
+    hide () {
+      clearTimeout(this.hoverCtrl)
+      this.hoverCtrl = setTimeout(() => {
+        this.isHover = false
+      }, 500)
+    }
+  },
   computed: {
     isShow () {
       return this.$store.state.isLogin
