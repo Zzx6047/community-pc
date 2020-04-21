@@ -1,13 +1,14 @@
 <template>
-  <div class="layui-container fly-marginTop">
+  <div class="layui-container fly-marginTop fly-user-main">
     <ul class="layui-nav layui-nav-tree" lay-filter="test">
-      <li class="layui-nav-item">
-        <a href="">
-          <i class="iconfont icon-zhangshangcaifuyemianshoujiban243"></i>
-          大数据
-          </a>
+      <li class="layui-nav-item" v-for="(item, index) in lists" :key="'center' + index">
+        <router-link :to="{name: item.link}">
+          <i class="layui-icon" :class="item.icon"></i>
+          {{item.name}}
+        </router-link>
       </li>
     </ul>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -18,8 +19,34 @@ export default {
     return {
       lists: [
         {
-          name: '',
-          icon: 'icon-home1'
+          name: '我的首页',
+          icon: 'layui-icon-home',
+          link: 'home'
+        },
+        {
+          name: '用户中心',
+          icon: 'layui-icon-friends',
+          link: 'center'
+        },
+        {
+          name: '基本设置',
+          icon: 'layui-icon-set',
+          link: 'set'
+        },
+        {
+          name: '我的帖子',
+          icon: 'layui-icon-form',
+          link: 'posts'
+        },
+        {
+          name: '我的消息',
+          icon: 'layui-icon-reply-fill',
+          link: 'msg'
+        },
+        {
+          name: '其他设置',
+          icon: 'layui-icon-component',
+          link: 'others'
         }
       ]
     }
@@ -27,5 +54,4 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-@import '../assets/custom/iconfont.css'
 </style>
