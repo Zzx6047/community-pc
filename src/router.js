@@ -9,10 +9,14 @@ const Template1 = () => import(/* webpackChunkName: 'template1' */ './views/chan
 const User = () => import(/* webpackChunkName: 'user' */ './views/User.vue')
 const Center = () => import(/* webpackChunkName: 'center' */ './views/Center.vue')
 const UserCenter = () => import(/* webpackChunkName: 'usercenter' */ './components/user/Center.vue')
-const Settings = () => import(/* webpackChunkName: 'Settings' */ './components/user/Settings.vue')
-const Posts = () => import(/* webpackChunkName: 'Settings' */ './components/user/Posts.vue')
-const Msg = () => import(/* webpackChunkName: 'Settings' */ './components/user/Msg.vue')
-const Others = () => import(/* webpackChunkName: 'Settings' */ './components/user/Others.vue')
+const Settings = () => import(/* webpackChunkName: 'settings' */ './components/user/Settings.vue')
+const Posts = () => import(/* webpackChunkName: 'user-posts' */ './components/user/Posts.vue')
+const Msg = () => import(/* webpackChunkName: 'user-msg' */ './components/user/Msg.vue')
+const Others = () => import(/* webpackChunkName: 'others' */ './components/user/Others.vue')
+const MyInfo = () => import(/* webpackChunkName: 'info' */ './components/user/common/MyInfo.vue')
+const PicUpload = () => import(/* webpackChunkName: 'picUpload' */ './components/user/common/PicUpload.vue')
+const Passwd = () => import(/* webpackChunkName: 'passwd' */ './components/user/common/Passwd.vue')
+const Accounts = () => import(/* webpackChunkName: 'accounts' */ './components/user/common/Accounts.vue')
 
 Vue.use(Router)
 
@@ -76,7 +80,29 @@ export default new Router({
         {
           path: 'set',
           name: 'set',
-          component: Settings
+          component: Settings,
+          children: [
+            {
+              path: '',
+              name: 'info',
+              component: MyInfo
+            },
+            {
+              path: 'pic',
+              name: 'pic',
+              component: PicUpload
+            },
+            {
+              path: 'passwd',
+              name: 'passwd',
+              component: Passwd
+            },
+            {
+              path: 'account',
+              name: 'account',
+              component: Accounts
+            }
+          ]
         },
         {
           path: 'posts',
