@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home.vue'
+import store from './store'
 const Login = () => import(/* webpackChunkName: 'login' */ './views/Login.vue')
 const Reg = () => import(/* webpackChunkName: 'reg' */ './views/Reg.vue')
 const Forget = () => import(/* webpackChunkName: 'forget' */ './views/Forget.vue')
@@ -22,7 +23,7 @@ const MyCollection = () => import(/* webpackChunkName: 'mycollection' */ './comp
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   linkExactActiveClass: 'layui-this',
   routes: [
     {
@@ -72,6 +73,7 @@ export default new Router({
     {
       path: '/center',
       component: Center,
+      meta: { requiresAuth: true },
       linkActiveClass: 'layui-this',
       children: [
         {
@@ -137,3 +139,27 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  if (token !== '' && token !== null) {
+    store.commit('setToken', token)
+    store.commit('setUserInfo', userInfo)
+    store.commit('setIsLgin', true)
+  }
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    const isLogin = store.state.isLogin
+    if (isLogin) {
+      // 已登录
+      next()
+    } else {
+      // 未登录
+      next('login')
+    }
+  } else {
+    next()
+  }
+})
+
+export default router

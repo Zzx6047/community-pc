@@ -36,6 +36,11 @@ export default {
 .text-right {
   text-align: right;
 }
+@for $i from 0 to 5 {
+  .pd#{$i} {
+    padding: $i * 10 + px;
+  }
+}
 .pl0 {
   padding-left: 0;
 }

@@ -65,7 +65,7 @@
               <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
               <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
               <hr style="margin: 5px 0;">
-              <dd><a href="/user/logout/" style="text-align: center;">退出</a></dd>
+              <dd><a href="javascript: void(0)" style="text-align: center;" @click="logout">退出</a></dd>
             </dl>
           </li>
         </template>
@@ -95,6 +95,15 @@ export default {
       this.hoverCtrl = setTimeout(() => {
         this.isHover = false
       }, 500)
+    },
+    logout () {
+      this.$confirm('确定退出嘛?', () => {
+        localStorage.clear()
+        this.$store.commit('setToken', '')
+        this.$store.commit('setUserInfo', '')
+        this.$store.commit('setIsLgin', false)
+        this.$router.push('/')
+      }, () => {})
     }
   },
   computed: {
