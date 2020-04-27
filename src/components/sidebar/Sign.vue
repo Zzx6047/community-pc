@@ -4,9 +4,9 @@
     <div class="fly-panel-title">
       签到
       <i class="fly-mid"></i>
-      <a href="javascript:;" class="fly-link" id="LAY_signinHelp">说明</a>
+      <a href="javascript:;" class="fly-link" id="LAY_signinHelp" @click="showInfo()">说明</a>
       <i class="fly-mid"></i>
-      <a href="javascript:;" class="fly-link" id="LAY_signinTop">
+      <a href="javascript:;" class="fly-link" id="LAY_signinTop" @click="showTop()">
         活跃榜
         <span class="layui-badge-dot"></span>
       </a>
@@ -28,20 +28,104 @@
           <span>获得了<cite>20</cite>飞吻</span>
       -->
     </div>
+    <sign-info :isShow="isShow" @closeModal="close()"></sign-info>
+    <sign-list :isShow="showList" @closeModal="close()"></sign-list>
   </div>
 </template>
 
 <script>
+import SignInfo from './SignInfo'
+import SignList from './SignList'
 export default {
-  name: 'tips',
+  name: 'sign',
   data () {
-    return {}
+    return {
+      isShow: false,
+      showList: false,
+      current: 0
+    }
   },
-  components: {},
+  components: {
+    SignInfo,
+    SignList
+  },
   computed: {},
-  mounted: {},
-  methods: {}
+  mounted () {},
+  methods: {
+    showInfo () {
+      this.isShow = true
+    },
+    showTop () {
+      this.showList = true
+    },
+    close () {
+      this.isShow = false
+      this.showList = false
+    },
+    choose (val) {
+      this.current = val
+    }
+  }
 }
 </script>
-<style lang='scss' scoped>
+<style lang='scss'>
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.mask {
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 20000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.layui-layer {
+  position: fixed;
+  width: 300px;
+  height: 50%;
+  left: 50%;
+  margin-top: -240px;
+  margin-left: -150px;
+  background: #ffffff;
+  z-index: 20001;
+  &.active {
+    animation-fill-mode: both;
+    animation-duration: 0.2s;
+    animation-name: bounceIn;
+  }
+  .layui-layer-title {
+    height: 42px;
+    line-height: 42px;
+    padding: 0 20px;
+  }
+  .layui-layer-content {
+    padding: 20px;
+  }
+  .layui-tab-content {
+    padding: 0 10px;
+  }
+  .layui-tab-item {
+    line-height: 45px;
+    li {
+      border-bottom: 1px dotted #dcdcdc;
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    img {
+      width: 30px;
+      height: 30px;
+      border-radius: 2px;
+    }
+  }
+}
 </style>

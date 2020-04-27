@@ -42,8 +42,8 @@
 
 <script>
 import _ from 'lodash'
-import 'moment/locale/zh-cn'
-import moment from 'moment'
+import 'dayjs/locale/zh-cn'
+import moment from 'dayjs'
 export default {
   name: 'listitem',
   data () {

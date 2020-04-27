@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home.vue'
 import store from './store'
+import jwt from 'jsonwebtoken'
+import moment from 'dayjs'
+
 const Login = () => import(/* webpackChunkName: 'login' */ './views/Login.vue')
 const Reg = () => import(/* webpackChunkName: 'reg' */ './views/Reg.vue')
 const Forget = () => import(/* webpackChunkName: 'forget' */ './views/Forget.vue')
@@ -83,7 +86,6 @@ const router = new Router({
         },
         {
           path: 'set',
-          name: 'set',
           component: Settings,
           children: [
             {
@@ -110,7 +112,6 @@ const router = new Router({
         },
         {
           path: 'posts',
-          name: 'posts',
           component: Posts,
           children: [
             {
@@ -144,9 +145,15 @@ router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   if (token !== '' && token !== null) {
-    store.commit('setToken', token)
-    store.commit('setUserInfo', userInfo)
-    store.commit('setIsLgin', true)
+    const payload = jwt.decode(token)
+    if (moment().isBefore(moment(payload.exp * 1000))) {
+      // 8-24小时
+      store.commit('setToken', token)
+      store.commit('setUserInfo', userInfo)
+      store.commit('setIsLgin', true)
+    } else {
+      localStorage.clear()
+    }
   }
   if (to.matched.some(record => record.meta.requiresAuth)) {
     const isLogin = store.state.isLogin

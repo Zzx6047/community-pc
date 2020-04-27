@@ -38,13 +38,22 @@ export default {
 }
 @for $i from 0 to 5 {
   .pd#{$i} {
-    padding: $i * 10 + px;
+    padding: $i * 10 + px !important;
+  }
+  .pl#{$i} {
+    padding-left: $i * 10 + px !important;
+  }
+  .pr#{$i} {
+    padding-right: $i * 10 + px !important;
+  }
+  .mr#{$i} {
+    margin-right: $i * 10 + px !important;
   }
 }
-.pl0 {
-  padding-left: 0;
+.orange {
+  color: #ff5722;
 }
-.pr0 {
-  padding-right: 0;
+.pull-right {
+  float: right !important;
 }
 </style>
