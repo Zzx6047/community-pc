@@ -12,21 +12,22 @@
       </a>
       <span class="fly-signin-days">
         已连续签到
-        <cite>16</cite>天
+        <cite>{{count}}</cite>天
       </span>
     </div>
     <div class="fly-panel-main fly-signin-main">
-      <button class="layui-btn layui-btn-danger" id="LAY_signin">今日签到</button>
-      <span>
-        可获得
-        <cite>5</cite>飞吻
-      </span>
-
+      <template v-if="!isSign">
+        <button class="layui-btn layui-btn-danger" id="LAY_signin" @click="sign()">今日签到</button>
+        <span>
+          可获得
+          <cite>{{favs}}</cite>飞吻
+        </span>
+      </template>
       <!-- 已签到状态 -->
-      <!--
-          <button class="layui-btn layui-btn-disabled">今日已签到</button>
-          <span>获得了<cite>20</cite>飞吻</span>
-      -->
+      <template v-else>
+        <button class="layui-btn layui-btn-disabled">今日已签到</button>
+        <span>获得了<cite>{{favs}}</cite>飞吻</span>
+      </template>
     </div>
     <sign-info :isShow="isShow" @closeModal="close()"></sign-info>
     <sign-list :isShow="showList" @closeModal="close()"></sign-list>
@@ -36,21 +37,52 @@
 <script>
 import SignInfo from './SignInfo'
 import SignList from './SignList'
+import { userSign } from '../../api/user'
 export default {
   name: 'sign',
   data () {
     return {
       isShow: false,
       showList: false,
-      current: 0
+      current: 0,
+      isSign: false
     }
   },
   components: {
     SignInfo,
     SignList
   },
-  computed: {},
-  mounted () {},
+  computed: {
+    favs () {
+      let count = parseInt(this.count)
+      let result = 0
+      if (count < 5) {
+        result = 5
+      } else if (count >= 5 && count < 15) {
+        result = 10
+      } else if (count >= 15 && count < 30) {
+        result = 15
+      } else if (count >= 30 && count < 100) {
+        result = 20
+      } else if (count >= 100 && count < 365) {
+        result = 30
+      } else if (count >= 365) {
+        result = 50
+      }
+      return result
+    },
+    count () {
+      if (this.$store.state.userInfo !== {}) {
+        if (typeof this.$store.state.userInfo.count !== 'undefined') {
+          return this.$store.state.userInfo.count
+        } else {
+          return 0
+        }
+      } else {
+        return 0
+      }
+    }
+  },
   methods: {
     showInfo () {
       this.isShow = true
@@ -64,6 +96,13 @@ export default {
     },
     choose (val) {
       this.current = val
+    },
+    sign () {
+      userSign().then((res) => {
+        if (res.code === 200) {
+          this.isSign = true
+        }
+      })
     }
   }
 }
