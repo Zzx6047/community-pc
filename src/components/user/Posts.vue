@@ -1,4 +1,3 @@
-<!--  -->
 <template>
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief">
@@ -7,26 +6,19 @@
           <router-link :to="{name: 'mypost'}">我的发帖</router-link>
         </li>
         <li>
-          <router-link :to="{name: 'mycollection'}">我收藏的贴</router-link>
+          <router-link :to="{name: 'mycollection'}">我收藏的帖</router-link>
         </li>
       </ul>
+      <router-view></router-view>
     </div>
-    <router-view></router-view>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'user-post',
-  data () {
-    return {
-    }
-  },
-  components: {},
-  computed: {},
-  mounted () {},
-  methods: {}
+  name: 'user-post'
 }
 </script>
-<style lang='scss' scoped>
+
+<style lang="scss" scoped>
 </style>

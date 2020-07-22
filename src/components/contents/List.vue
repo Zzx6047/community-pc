@@ -1,8 +1,7 @@
-<!--  -->
 <template>
   <div class="fly-panel" style="margin-bottom: 0;">
     <div class="fly-panel-title fly-filter">
-      <a :class="{'layui-this': status === '' && tag === ''}" @click.prevent="search()">综合</a>
+      <a :class="{'layui-this': status ==='' && tag === ''}" @click.prevent="search()">综合</a>
       <span class="fly-mid"></span>
       <a :class="{'layui-this': status === '0'}" @click.prevent="search(0)">未结</a>
       <span class="fly-mid"></span>
@@ -15,27 +14,28 @@
         <a :class="{'layui-this': sort === 'answer'}" @click.prevent="search(4)">按热议</a>
       </span>
     </div>
-    <list-item :lists="lists" :isEnd="isEnd" @nextPage="nextPage()"></list-item>
+    <list-item :lists="lists" :isEnd="isEnd" @nextpage="nextPage()"></list-item>
   </div>
 </template>
 
 <script>
-import { getList } from '@/api/content'
 import ListItem from './ListItem'
+import listMix from '@/mixin/list'
 export default {
   name: 'list',
+  mixins: [listMix],
   data () {
     return {
-      isEnd: false,
-      isRepeat: false,
       status: '',
       tag: '',
       sort: 'created',
       page: 0,
       limit: 20,
       catalog: '',
-      lists: [],
-      current: ''
+      isEnd: false,
+      isRepeat: false,
+      current: '',
+      lists: []
     }
   },
   components: {
@@ -43,12 +43,10 @@ export default {
   },
   watch: {
     current (newval, oldval) {
-      this.page = 0
-      this.lists = []
-      this.isEnd = false
-      this._getList()
+      // 去兼听current标签是否有变化，如果有变化，则需要重新进行查询
+      this.init()
     },
-    '$route' (newval, oldval) {
+    $route (newval, oldval) {
       let catalog = this.$route.params['catalog']
       if (typeof catalog !== 'undefined' && catalog !== '') {
         this.catalog = catalog
@@ -56,65 +54,14 @@ export default {
       this.init()
     }
   },
-  mounted () {
-    let catalog = this.$route.params['catalog']
-    if (typeof catalog !== 'undefined' && catalog !== '') {
-      this.catalog = catalog
-    }
-    this._getList()
-  },
   methods: {
-    init () {
-      this.page = 0
-      this.lists = []
-      this.isEnd = false
-      this._getList()
-    },
-    _getList () {
-      if (this.isRepeat) return
-      if (this.isEnd) return
-      this.isRepeat = true
-      let options = {
-        catalog: this.catalog,
-        isTop: 0,
-        page: this.page,
-        limit: this.limit,
-        sort: this.sort,
-        tag: this.tag,
-        status: this.status
-      }
-      getList(options).then((res) => {
-        this.isRepeat = false
-        console.log(res)
-        if (res.code === 200) {
-          if (res.data.length < this.limit) {
-            this.isEnd = true
-          }
-          if (this.lists.length === 0) {
-            this.lists = res.data
-          } else {
-            this.lists = this.lists.concat(res.data)
-          }
-        }
-      }).catch((err) => {
-        this.isRepeat = false
-        if (err) {
-          this.$alert(err.message)
-        }
-      })
-    },
-    nextPage () {
-      this.page++
-      this._getList()
-    },
     search (val) {
       if (typeof val === 'undefined' && this.current === '') {
         return
       }
-      // console.log(val)
       this.current = val
       switch (val) {
-        // 未结帖
+        // 未结贴
         case 0:
           this.status = '0'
           this.tag = ''
@@ -147,5 +94,6 @@ export default {
   }
 }
 </script>
-<style lang='scss' scoped>
+
+<style lang="scss" scoped>
 </style>

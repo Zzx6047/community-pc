@@ -1,18 +1,21 @@
+
 <template>
   <div>
-    <panel></panel>
+    <imooc-panel></imooc-panel>
     <router-view></router-view>
   </div>
 </template>
+
 <script>
 import Panel from '@/components/Panel'
+
 export default {
   name: 'home',
   components: {
-    Panel
+    'imooc-panel': Panel
   }
 }
 </script>
-<style lang="scss" scoped>
 
+<style lang="scss" scoped>
 </style>

@@ -108,6 +108,7 @@
 </template>
 
 <script>
+import uuid from 'uuid'
 import { getCode, forget } from '@/api/login'
 import { ValidationProvider } from 'vee-validate'
 export default {
@@ -123,12 +124,20 @@ export default {
     }
   },
   mounted () {
+    let sid = ''
+    if (localStorage.getItem('sid')) {
+      sid = localStorage.getItem('sid')
+    } else {
+      sid = uuid()
+      localStorage.setItem('sid', sid)
+    }
+    this.$store.commit('setSid', sid)
     this._getCode()
   },
   methods: {
     _getCode () {
-      getCode().then((res) => {
-        console.log(res)
+      let sid = this.$store.state.sid
+      getCode(sid).then((res) => {
         if (res.code === 200) {
           this.svg = res.data
         }
@@ -139,7 +148,6 @@ export default {
         username: this.username,
         code: this.code
       }).then((res) => {
-        console.log(res)
         if (res.code === 200) {
           alert('邮件发送成功')
         }

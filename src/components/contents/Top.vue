@@ -1,4 +1,3 @@
-<!--  -->
 <template>
   <div class="fly-panel" v-show="lists.length > 0">
     <div class="fly-panel-title fly-filter">
@@ -15,23 +14,21 @@
 </template>
 
 <script>
+import listMix from '@/mixin/list'
 import ListItem from './ListItem'
 export default {
   name: 'top',
+  mixins: [listMix],
   data () {
     return {
-      page: 0,
-      limit: 20,
-      lists: []
+      isTop: 1
     }
   },
   components: {
     ListItem
-  },
-  computed: {},
-  mounted: {},
-  methods: {}
+  }
 }
 </script>
-<style lang='scss' scoped>
+
+<style lang="scss" scoped>
 </style>

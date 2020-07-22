@@ -1,21 +1,21 @@
-<!--  -->
 <template>
   <div class="layui-container">
     <div class="layui-row layui-col-space15">
       <div class="layui-col-md8">
-        <top></top>
-        <list></list>
+        <imooc-top></imooc-top>
+        <imooc-list></imooc-list>
       </div>
       <div class="layui-col-md4">
-        <tips></tips>
-        <sign></sign>
-        <hot-list></hot-list>
-        <ads></ads>
-        <links></links>
+        <imooc-tips></imooc-tips>
+        <imooc-sign></imooc-sign>
+        <imooc-hotlist></imooc-hotlist>
+        <imooc-ads></imooc-ads>
+        <imooc-links></imooc-links>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import Tips from '@/components/sidebar/Tips'
 import Sign from '@/components/sidebar/Sign'
@@ -26,22 +26,17 @@ import List from '@/components/contents/List'
 import Top from '@/components/contents/Top'
 export default {
   name: 'index',
-  data () {
-    return {}
-  },
   components: {
-    Tips,
-    Sign,
-    HotList,
-    Ads,
-    Links,
-    List,
-    Top
-  },
-  computed: {},
-  mounted: {},
-  methods: {}
+    'imooc-tips': Tips,
+    'imooc-sign': Sign,
+    'imooc-hotlist': HotList,
+    'imooc-ads': Ads,
+    'imooc-links': Links,
+    'imooc-list': List,
+    'imooc-top': Top
+  }
 }
 </script>
-<style lang='scss' scoped>
+
+<style lang="scss" scoped>
 </style>
